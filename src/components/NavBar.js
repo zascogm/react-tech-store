@@ -10,7 +10,7 @@ export default function Navbar() {
             {value => {
                 const {cartItems, handleSidebar, handleCart} = value;
                 return (
-                    <NavWapper>
+                    <NavWrapper>
                         <div className="nav-center">
                             <FaBars className="nav-icon" onClick={handleSidebar} />
                             <img src={logo} alt="Tech store logo"/>
@@ -19,14 +19,14 @@ export default function Navbar() {
                                 <div className="cart-items">{cartItems}</div>
                             </div>
                         </div>
-                    </NavWapper>
-                )
+                    </NavWrapper>
+                );
             }}
         </ProductConsumer>
-    )
+    );
 }
 
-const NavWapper = styled.nav`
+const NavWrapper = styled.nav`
     position: --webkit-sticky;
     position: sticky;
     top: 0;
@@ -58,7 +58,7 @@ const NavWapper = styled.nav`
         font-size: 0.85rem;
         position: absolute;
         top: -8px;
-        right: --8px;
+        right: -8px;
         padding: 0 5 px;
         border-radius: 50%;
     }

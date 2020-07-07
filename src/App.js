@@ -12,8 +12,8 @@ import SingleProduct from './pages/SingleProductPage'
 
 import {Route, Switch} from 'react-router-dom'
 
-import Navbar from './components/NavBar'
-import Sidebar from './components/SideBar'
+import Navbar from './components/Navbar'
+import Sidebar from './components/Sidebar'
 import Sidecart from './components/SideCart'
 import Footer from './components/Footer'
 
