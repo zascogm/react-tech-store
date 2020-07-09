@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import {linkData} from './linkData'
+import {socialData} from './socialData'
 
 const ProductContext = React.createContext();
-
 
 class ProductProvider extends Component {
     state = {
@@ -10,6 +10,7 @@ class ProductProvider extends Component {
         cartOpen: false,
         cartItems: 0,
         links: linkData,
+        socialIcons: socialData,
         cart: []
     }
 

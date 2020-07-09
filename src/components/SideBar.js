@@ -17,7 +17,7 @@ export default function Sidebar() {
                                         <Link 
                                             to={link.path} 
                                             className="sidebar-link" 
-                                            onClink={handleSidebar}
+                                            onClick={handleSidebar}
                                         >
                                             {link.text}
                                         </Link>
