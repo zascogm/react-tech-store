@@ -10,7 +10,7 @@ import Home from './pages/HomePage'
 import Products from './pages/ProductsPage'
 import SingleProduct from './pages/SingleProductPage'
 
-import Sidebar from './components/Sidebar'
+import Sidebar from '../src/components/Sidebar'
 import Sidecart from './components/SideCart'
 import Footer from './components/Footer'
 import Navbar from './components/Navbar'
