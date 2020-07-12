@@ -10,12 +10,12 @@ import Home from './pages/HomePage'
 import Products from './pages/ProductsPage'
 import SingleProduct from './pages/SingleProductPage'
 
-import {Route, Switch} from 'react-router-dom'
-
-import Navbar from './components/Navbar'
 import Sidebar from './components/Sidebar'
 import Sidecart from './components/SideCart'
 import Footer from './components/Footer'
+import Navbar from './components/Navbar'
+
+import {Route, Switch} from 'react-router-dom'
 
 function App() {
   return (
