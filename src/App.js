@@ -12,10 +12,10 @@ import Default from './pages/Default';
 
 import {Route, Switch} from 'react-router-dom';
 
+import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
-import Sidebar from './components/Sidebar';
-import Sidecart from './components/SideCart';
-import Footer from './components/Footer';
+import Sidecart from "./components/SideCart";
+import Footer from "./components/Footer";
 
 function App() {
   return (
