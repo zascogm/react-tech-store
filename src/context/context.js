@@ -8,7 +8,7 @@ const ProductContext = React.createContext();
 class ProductProvider extends Component {
     state = {
         sidebarOpen: false,
-        cartOpen: true,
+        cartOpen: false,
         links: linkData,
         socialIcons: socialData,
         cart: [],
@@ -20,7 +20,13 @@ class ProductProvider extends Component {
         filteredProducts: [],
         featuredProducts: [],
         singleProduct: {},
-        loading: true
+        loading: true,
+        search: '',
+        price: 0,
+        min: 0,
+        max: 0,
+        company: 'all',
+        shipping: false
     }
 
     componentDidMount() {
@@ -35,6 +41,7 @@ class ProductProvider extends Component {
             return product;
         });
         let featuredProducts = storeProducts.filter(item => item.featured === true);
+        let maxPrice = Math.max(...storeProducts.map(item => item.price));
         
         this.setState({
             storeProducts,
@@ -42,7 +49,9 @@ class ProductProvider extends Component {
             featuredProducts,
             cart: this.getStorageCart(),
             singleProduct: this.getStorageProduct(),
-            loading: false
+            loading: false,
+            price: maxPrice,
+            max: maxPrice
         }, () => {
             this.addTotals();
         });
@@ -146,6 +155,110 @@ class ProductProvider extends Component {
         this.setState({cartOpen: true})
     }
 
+    increment = id => {
+        let tempCart = [...this.state.cart];
+        const cartItem = tempCart.find(item => item.id === id);
+        cartItem.count++;
+        cartItem.total = cartItem.count * cartItem.price;
+        cartItem.total = parseFloat(cartItem.total.toFixed(2));
+
+        this.setState(() => { 
+            return {
+                cart: [...tempCart]
+            }
+        }, () => {
+            this.addTotals();
+            this.syncStorage();
+        });
+    };
+// Plenty room for refactoring and improvments on the this code.
+// The purpose of the instructor it was to help students understand react, not good practices of code so
+// for that reason is understandable this spaguetti and repetition thing all over the place.
+    decrement = id => {
+        let tempCart = [...this.state.cart];
+        const cartItem = tempCart.find(item => item.id === id);
+        cartItem.count = cartItem.count - 1;
+
+        if (cartItem.count === 0) {
+            this.removeItem(id);
+        } else {
+            cartItem.total = cartItem.count * cartItem.price;
+            cartItem.total = parseFloat(cartItem.total.toFixed(2));
+
+            this.setState(() => { 
+                return {
+                    cart: [...tempCart]
+                }
+            }, () => {
+                this.addTotals();
+                this.syncStorage();
+            });
+        }
+    }
+
+    removeItem = id => {
+        let tempCart = [...this.state.cart];
+        tempCart = tempCart.filter(item => item.id !== id);
+        
+        this.setState({ 
+            cart: [...tempCart]
+        }, () => {
+            this.addTotals();
+            this.syncStorage();
+        })
+    };
+
+    clearCart = () => {
+        this.setState({
+            cart: []
+        }, () => {
+            this.addTotals();
+            this.syncStorage();
+        })
+    };
+
+    handleChange = (event) => {
+        const name = event.target.name;
+        const value = event.target.type === "checkbox" ? event.target.checked : event.target.value;
+
+        this.setState({
+            [name]: value
+        }, this.sortData);
+    };
+
+    sortData = () => {
+        const {storeProducts, price, company, shipping, search} = this.state;
+        let tempPrice = parseInt(price);
+        let tempProducts = [...storeProducts];
+
+        tempProducts = tempProducts.filter(item => item.price <= tempPrice);
+
+        if (company !== "all") {
+            tempProducts = tempProducts.filter(item => item.company === company);
+        }
+
+        if (shipping) {
+            tempProducts = tempProducts.filter(item => item.freeShipping === true);
+        }
+
+        if (search.length > 0) {
+            tempProducts = tempProducts.filter(item => {
+                let tempSearch = search.toLowerCase();
+                let tempTitle = item.title.toLowerCase().slice(0, search.length);
+
+                if (tempSearch === tempTitle) {
+                    return item;
+                } else {
+                    return '';
+                }
+            });
+        }
+        
+        this.setState({
+            filteredProducts: tempProducts
+        });
+    };
+
     render() {
         return (
             <ProductContext.Provider value={{
@@ -155,7 +268,12 @@ class ProductProvider extends Component {
                 closeCart: this.closeCart,
                 openCart: this.openCart,
                 addToCart: this.addToCart,
-                setSingleProduct: this.setSingleProduct
+                setSingleProduct: this.setSingleProduct,
+                increment: this.increment,
+                decrement: this.decrement,
+                removeItem: this.removeItem,
+                clearCart: this.clearCart,
+                handleChange: this.handleChange
             }}>
                 {this.props.children}
             </ProductContext.Provider>
